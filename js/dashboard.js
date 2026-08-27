@@ -95,9 +95,9 @@ watchBtn.addEventListener("click", () => {
 function startAdTimer() {
   watchBtn.disabled = true;
   watchBtn.textContent = "Ad chal rahi hai...";
-  document.getElementById("adSlot").textContent = "Ad chal rahi hai — poora dekhein...";
-  // NOTE: Replace the text above with your actual Adsterra ad unit
-  // (script tag or iframe) so a real ad renders inside #adSlot.
+
+  // Open Adsterra Smartlink in a new tab
+  window.open("https://bibleearthquake.com/ccf1q1jw?key=52f7ecf948a0f517f28ed331316d0239", "_blank");
 
   let remaining = SETTINGS.AD_WATCH_SECONDS;
   ringSecs.textContent = remaining + "s";
@@ -116,7 +116,6 @@ function startAdTimer() {
 }
 
 async function claimReward() {
-  document.getElementById("adSlot").textContent = "Yahan aapka Adsterra ad code load hoga";
   const ref = doc(db, "users", currentUser.uid);
   const newWatched = (userData.dailyAdsWatched || 0) + 1;
 

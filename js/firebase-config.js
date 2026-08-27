@@ -34,5 +34,5 @@ export const SETTINGS = {
   MIN_WITHDRAWAL: 5,          // minimum $ a user must have to request withdrawal
   WITHDRAWAL_FEE_PERCENT: 10, // total fee you take on withdrawal
   REFERRAL_SHARE_PERCENT: 5,  // portion of that fee passed to the inviter (must be <= WITHDRAWAL_FEE_PERCENT)
-  ADMIN_EMAIL: "you@example.com" // ONLY this email can open admin.html
+  ADMIN_EMAIL: "advertisingbwp@gmail.com" // ONLY this email can open admin.html
 };
