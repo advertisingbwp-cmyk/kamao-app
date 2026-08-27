@@ -17,7 +17,18 @@ document.getElementById("ringFg").style.strokeDasharray = CIRC;
 document.getElementById("ringFg").style.strokeDashoffset = CIRC;
 
 function todayStr() {
-  return new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+  return new Date().toISOString().slice(0, 10);
+}
+
+function getDailyLimit(plan) {
+  if (plan === "gold") return SETTINGS.DAILY_AD_LIMIT_GOLD;
+  if (plan === "silver") return SETTINGS.DAILY_AD_LIMIT_SILVER;
+  return SETTINGS.DAILY_AD_LIMIT_FREE;
+}
+
+function isPlanActive(userData) {
+  if (userData.plan === "free" || !userData.plan) return true;
+  return userData.planExpiry && Date.now() < userData.planExpiry;
 }
 
 onAuthStateChanged(auth, async (user) => {
@@ -33,7 +44,13 @@ async function loadUser() {
   const snap = await getDoc(ref);
   userData = snap.data();
 
-  // Reset daily counter if it's a new day
+  // If plan expired, reset to free
+  if (userData.plan !== "free" && userData.planExpiry && Date.now() > userData.planExpiry) {
+    userData.plan = "free";
+    await updateDoc(ref, { plan: "free" });
+  }
+
+  // Reset daily counter if new day
   if (userData.lastAdDate !== todayStr()) {
     userData.dailyAdsWatched = 0;
     await updateDoc(ref, { dailyAdsWatched: 0, lastAdDate: todayStr() });
@@ -44,20 +61,30 @@ async function loadUser() {
 
 function renderUser() {
   const total = (userData.balance || 0) + (userData.referralBonus || 0);
-  document.getElementById("balanceAmount").textContent = "$" + total.toFixed(2);
-  document.getElementById("earnPart").textContent = "$" + (userData.balance || 0).toFixed(2);
-  document.getElementById("refPart").textContent = "$" + (userData.referralBonus || 0).toFixed(2);
+  document.getElementById("balanceAmount").textContent = "₨" + Math.floor(total);
+  document.getElementById("earnPart").textContent = "₨" + Math.floor(userData.balance || 0);
+  document.getElementById("refPart").textContent = "₨" + Math.floor(userData.referralBonus || 0);
 
+  const plan = isPlanActive(userData) ? (userData.plan || "free") : "free";
+  const limit = getDailyLimit(plan);
   const watched = userData.dailyAdsWatched || 0;
-  const pct = Math.min(100, (watched / SETTINGS.DAILY_AD_LIMIT) * 100);
+  const pct = Math.min(100, (watched / limit) * 100);
   document.getElementById("dailyFill").style.width = pct + "%";
-  document.getElementById("dailyLabel").textContent = `${watched} / ${SETTINGS.DAILY_AD_LIMIT} ads aaj`;
+  document.getElementById("dailyLabel").textContent = `${watched} / ${limit} ads aaj`;
 
-  const refLink = `${window.location.origin}${window.location.pathname.replace("dashboard.html","index.html")}?ref=${userData.referralCode}`;
+  // Plan badge
+  const badge = document.getElementById("userPlanBadge");
+  if (badge) {
+    if (plan === "gold") { badge.textContent = "Gold 🥇"; badge.className = "plan-tag gold-tag"; }
+    else if (plan === "silver") { badge.textContent = "Silver 🥈"; badge.className = "plan-tag silver-tag"; }
+    else { badge.textContent = "Free"; badge.className = "plan-tag free-tag"; }
+  }
+
+  const refLink = `${window.location.origin}/index.html?ref=${userData.referralCode}`;
   document.getElementById("refLink").value = refLink;
 
   document.getElementById("wdFeeHint").textContent =
-    `Fee: ${SETTINGS.WITHDRAWAL_FEE_PERCENT}% (isme se ${SETTINGS.REFERRAL_SHARE_PERCENT}% aapke inviter ko jata hai agar aap referred hain). Minimum withdrawal $${SETTINGS.MIN_WITHDRAWAL}.`;
+    `Minimum withdrawal ₨${SETTINGS.MIN_WITHDRAWAL}. Referral bonus: pehli withdrawal par inviter ko 10% milta hai.`;
 
   updateWatchButton();
 }
@@ -69,11 +96,13 @@ const ringSecs = document.getElementById("ringSecs");
 let timerInterval = null;
 
 function updateWatchButton() {
+  const plan = isPlanActive(userData) ? (userData.plan || "free") : "free";
+  const limit = getDailyLimit(plan);
   const watched = userData.dailyAdsWatched || 0;
   const now = Date.now();
   const cooldownLeft = SETTINGS.COOLDOWN_SECONDS * 1000 - (now - (userData.lastAdTimestamp || 0));
 
-  if (watched >= SETTINGS.DAILY_AD_LIMIT) {
+  if (watched >= limit) {
     watchBtn.disabled = true;
     watchBtn.textContent = "Aaj ki limit khatam — kal wapis aayein";
   } else if (cooldownLeft > 0) {
@@ -83,7 +112,7 @@ function updateWatchButton() {
     setTimeout(updateWatchButton, 1000);
   } else {
     watchBtn.disabled = false;
-    watchBtn.textContent = "Ad Dekhna Shuru Karein";
+    watchBtn.textContent = "Ad Dekhna Shuru Karein (+₨1)";
   }
 }
 
@@ -96,7 +125,7 @@ function startAdTimer() {
   watchBtn.disabled = true;
   watchBtn.textContent = "Ad chal rahi hai...";
 
-  // Open Adsterra Smartlink in a new tab
+  // Open Adsterra Smartlink in new tab
   window.open("https://bibleearthquake.com/ccf1q1jw?key=52f7ecf948a0f517f28ed331316d0239", "_blank");
 
   let remaining = SETTINGS.AD_WATCH_SECONDS;
@@ -107,7 +136,6 @@ function startAdTimer() {
     const progress = 1 - remaining / SETTINGS.AD_WATCH_SECONDS;
     ringFg.style.strokeDashoffset = CIRC - progress * CIRC;
     ringSecs.textContent = remaining > 0 ? remaining + "s" : "✓";
-
     if (remaining <= 0) {
       clearInterval(timerInterval);
       claimReward();
@@ -158,7 +186,7 @@ document.getElementById("withdrawForm").addEventListener("submit", async (e) => 
   const totalBalance = (userData.balance || 0) + (userData.referralBonus || 0);
 
   if (amount < SETTINGS.MIN_WITHDRAWAL) {
-    errEl.textContent = `Minimum withdrawal $${SETTINGS.MIN_WITHDRAWAL} hai.`;
+    errEl.textContent = `Minimum withdrawal ₨${SETTINGS.MIN_WITHDRAWAL} hai.`;
     errEl.style.display = "block";
     return;
   }
@@ -168,44 +196,48 @@ document.getElementById("withdrawForm").addEventListener("submit", async (e) => 
     return;
   }
 
-  // Deduct proportionally from earning balance first, then referral bonus
   let fromEarning = Math.min(userData.balance || 0, amount);
   let fromReferral = amount - fromEarning;
 
-  const feeAmount = amount * (SETTINGS.WITHDRAWAL_FEE_PERCENT / 100);
-  const netToUser = amount - feeAmount;
-
+  // Referral: 10% to inviter only on FIRST withdrawal of this user
   let referrerCommission = 0;
   let referrerUid = userData.referredBy || null;
-  if (referrerUid) {
-    referrerCommission = amount * (SETTINGS.REFERRAL_SHARE_PERCENT / 100);
+  if (referrerUid && !userData.referralBonusPaid) {
+    referrerCommission = Math.floor(amount * (SETTINGS.REFERRAL_BONUS_PERCENT / 100));
   }
 
-  // Create withdrawal record
   await addDoc(collection(db, "withdrawals"), {
     uid: currentUser.uid,
     email: currentUser.email,
     amount,
-    feeAmount,
-    netToUser,
+    netToUser: amount,
     method,
     details,
     status: "pending",
     referrerUid,
     referrerCommission,
+    isFirstWithdrawal: !userData.referralBonusPaid,
     createdAt: Date.now()
   });
 
-  // Deduct from user's balances immediately (escrow until admin pays out)
   const userRef = doc(db, "users", currentUser.uid);
-  await updateDoc(userRef, {
+  const updateData = {
     balance: increment(-fromEarning),
-    referralBonus: increment(-fromReferral)
-  });
+    referralBonus: increment(-fromReferral),
+  };
+  // Mark referral bonus as paid (so it won't happen again)
+  if (referrerUid && !userData.referralBonusPaid) {
+    updateData.referralBonusPaid = true;
+  }
+  await updateDoc(userRef, updateData);
+
   userData.balance -= fromEarning;
   userData.referralBonus -= fromReferral;
+  if (referrerUid && !userData.referralBonusPaid) {
+    userData.referralBonusPaid = true;
+  }
 
-  // Credit referrer's bonus balance right away
+  // Credit referrer's bonus
   if (referrerUid && referrerCommission > 0) {
     const referrerRef = doc(db, "users", referrerUid);
     await updateDoc(referrerRef, { referralBonus: increment(referrerCommission) });
@@ -237,9 +269,9 @@ async function loadHistory() {
     body.innerHTML += `
       <tr>
         <td>${date}</td>
-        <td class="mono">$${w.amount.toFixed(2)}</td>
+        <td class="mono">₨${w.amount}</td>
         <td>${w.method}</td>
-        <td><span class="tag ${tagClass}">${w.status}</span></td>
+        <td><span class="tag ${tagClass}">${w.status === "paid" ? "Paid ✅" : "Pending ⏳"}</span></td>
       </tr>`;
   });
 }

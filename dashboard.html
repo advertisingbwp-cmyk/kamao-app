@@ -12,6 +12,7 @@
   <div class="topbar">
     <div class="brand"><span class="coin">K</span> Kamao</div>
     <div class="user-chip">
+      <span id="userPlanBadge" class="plan-tag"></span>
       <span id="userEmail">...</span> &nbsp;·&nbsp;
       <a href="#" id="logoutBtn">Logout</a>
     </div>
@@ -19,10 +20,10 @@
 
   <div class="balance-block">
     <div class="label">Total Balance (withdrawable)</div>
-    <div class="amount mono" id="balanceAmount">$0.00</div>
+    <div class="amount mono" id="balanceAmount">₨0</div>
     <div class="balance-sub">
-      <div>Earning se: <b class="mono" id="earnPart">$0.00</b></div>
-      <div>Referral bonus se: <b class="mono" id="refPart">$0.00</b></div>
+      <div>Earning se: <b class="mono" id="earnPart">₨0</b></div>
+      <div>Referral bonus se: <b class="mono" id="refPart">₨0</b></div>
     </div>
   </div>
 
@@ -52,13 +53,35 @@
         <div class="progress-bar"><div class="fill" id="dailyFill" style="width:0%"></div></div>
         <div class="progress-label" id="dailyLabel">0 / 15 ads aaj</div>
       </div>
+
+      <!-- Plan Upgrade Card -->
+      <div class="card" style="margin-top:20px;">
+        <h3 style="font-size:15px; margin-bottom:14px;">Plan Upgrade Karein</h3>
+        <div class="upgrade-plans">
+          <div class="upgrade-plan">
+            <div>
+              <div class="plan-name-sm">Silver Plan</div>
+              <div class="plan-detail">20 ads/din &nbsp;·&nbsp; ₨250/maah</div>
+            </div>
+            <a href="https://wa.me/923XXXXXXXXX?text=Silver+Plan+lena+hai" target="_blank" class="btn btn-ghost">Upgrade</a>
+          </div>
+          <div class="upgrade-plan" style="margin-top:10px;">
+            <div>
+              <div class="plan-name-sm gold-text">Gold Plan</div>
+              <div class="plan-detail">30 ads/din &nbsp;·&nbsp; ₨500/maah</div>
+            </div>
+            <a href="https://wa.me/923XXXXXXXXX?text=Gold+Plan+lena+hai" target="_blank" class="btn btn-ghost">Upgrade</a>
+          </div>
+        </div>
+        <p class="hint" style="margin-top:10px;">JazzCash/EasyPaisa se payment karke WhatsApp par screenshot bhejein.</p>
+      </div>
     </div>
 
     <!-- RIGHT: Referral + Withdraw -->
     <div>
       <div class="card" style="margin-bottom:20px;">
         <h3 style="font-size:16px; margin-bottom:6px;">Referral Link</h3>
-        <p class="hint">Dost is link se signup kare to, jab wo withdraw karega, aapko bonus milega.</p>
+        <p class="hint">Dost is link se signup kare to, unki <b>pehli withdrawal</b> par aapko <b>10% bonus</b> milega.</p>
         <div class="ref-box">
           <input type="text" id="refLink" readonly>
           <button class="btn btn-ghost" id="copyRefBtn">Copy</button>
@@ -69,21 +92,20 @@
         <h3 style="font-size:16px; margin-bottom:14px;">Withdraw Request</h3>
         <form id="withdrawForm">
           <div class="field">
-            <label>Amount ($)</label>
-            <input type="number" id="wdAmount" step="0.01" min="1" required>
+            <label>Amount (₨)</label>
+            <input type="number" id="wdAmount" step="1" min="1" required>
           </div>
           <div class="field">
             <label>Method</label>
             <select id="wdMethod">
-              <option>Bank Transfer</option>
               <option>JazzCash</option>
               <option>EasyPaisa</option>
-              <option>USDT (Tether)</option>
+              <option>Bank Transfer</option>
             </select>
           </div>
           <div class="field">
             <label>Account Details</label>
-            <input type="text" id="wdDetails" required placeholder="Account number / JazzCash number / wallet address">
+            <input type="text" id="wdDetails" required placeholder="Account number / JazzCash number">
           </div>
           <button type="submit" class="btn btn-primary btn-block">Withdraw Request Bhejein</button>
           <p class="error-msg" id="wdError"></p>

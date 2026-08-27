@@ -150,3 +150,55 @@ td{ padding:10px 8px; border-bottom:1px solid var(--line); }
 .user-chip{ font-size:13px; color:var(--text-dim); }
 
 footer{ text-align:center; padding:40px 0 20px; color:var(--text-dim); font-size:12px; }
+
+/* ---------- TICKER ---------- */
+.ticker-wrap{
+  display:flex; align-items:center; gap:12px; overflow:hidden;
+  background:rgba(47,158,143,.08); border:1px solid rgba(47,158,143,.2);
+  border-radius:10px; padding:10px 16px; margin:18px 0; font-size:13px;
+}
+.ticker-label{ color:var(--teal); font-weight:700; white-space:nowrap; font-size:12px; }
+.ticker-track{
+  display:flex; gap:32px; white-space:nowrap;
+  animation: tickerMove 22s linear infinite;
+}
+.ticker-item{ color:var(--text-dim); }
+@keyframes tickerMove { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ---------- PLANS ROW (index) ---------- */
+.plans-row{ display:flex; gap:12px; margin-top:28px; flex-wrap:wrap; }
+.plan-card{
+  flex:1; min-width:100px; background:var(--bg-card); border:1px solid var(--line);
+  border-radius:12px; padding:16px 14px; text-align:center;
+}
+.plan-card.plan-silver{ border-color:#9fb0c3; }
+.plan-card.plan-gold{ border-color:var(--gold); background:rgba(232,163,61,.07); }
+.plan-name{ font-size:12px; color:var(--text-dim); text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px; }
+.plan-badge{ font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px; color:var(--gold); }
+.plan-price{ font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:600; color:var(--text); }
+.plan-ads{ font-size:11px; color:var(--text-dim); margin-top:4px; }
+
+/* ---------- GOOGLE BUTTON ---------- */
+.btn-google{ background:#fff; color:#333; border:1px solid #ddd; margin-top:4px; justify-content:center; font-weight:600; }
+.btn-google:hover{ background:#f5f5f5; }
+
+/* ---------- DIVIDER ---------- */
+.divider{ text-align:center; margin:16px 0; position:relative; color:var(--text-dim); font-size:12px; }
+.divider::before, .divider::after{ content:""; position:absolute; top:50%; width:calc(50% - 20px); height:1px; background:var(--line); }
+.divider::before{ left:0; } .divider::after{ right:0; }
+
+/* ---------- PLAN TAG (dashboard topbar) ---------- */
+.plan-tag{ padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700; margin-right:8px; }
+.free-tag{ background:rgba(159,176,195,.15); color:var(--text-dim); }
+.silver-tag{ background:rgba(159,176,195,.25); color:#c0cfe0; }
+.gold-tag{ background:rgba(232,163,61,.2); color:var(--gold); }
+.gold-text{ color:var(--gold); }
+
+/* ---------- UPGRADE PLANS ---------- */
+.upgrade-plans .upgrade-plan{ display:flex; align-items:center; justify-content:space-between; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:12px 16px; }
+.plan-name-sm{ font-size:14px; font-weight:600; }
+.plan-detail{ font-size:12px; color:var(--text-dim); margin-top:2px; }
+
+/* ---------- ADMIN PASS GATE ---------- */
+.pass-gate{ min-height:100vh; display:flex; align-items:center; justify-content:center; background:var(--bg); padding:24px; }
+

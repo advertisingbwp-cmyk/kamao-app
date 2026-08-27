@@ -8,31 +8,42 @@
 </head>
 <body>
 
-<div class="wrap">
-  <div class="topbar">
-    <div class="brand"><span class="coin">K</span> Kamao Admin</div>
-    <div class="user-chip">
-      <span id="adminEmail"></span> &nbsp;·&nbsp;
-      <a href="#" id="logoutBtn">Logout</a>
+<!-- Admin Password Gate -->
+<div id="passGate" class="pass-gate">
+  <div class="card" style="max-width:380px; margin:auto;">
+    <div class="brand" style="justify-content:center; margin-bottom:24px;"><span class="coin">K</span> Admin Panel</div>
+    <div class="field">
+      <label>Admin Password</label>
+      <input type="password" id="adminPassInput" placeholder="Password darj karein">
     </div>
+    <button class="btn btn-primary btn-block" id="adminPassBtn">Enter</button>
+    <p class="error-msg" id="passError">Password ghalat hai.</p>
   </div>
+</div>
 
-  <div id="notAdminMsg" class="card" style="display:none; text-align:center; padding:40px;">
-    Ye page sirf admin ke liye hai.
-  </div>
+<!-- Admin Content (hidden until password correct) -->
+<div id="adminContent" style="display:none">
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand"><span class="coin">K</span> Kamao Admin</div>
+      <div class="user-chip">
+        <a href="#" id="logoutBtn">Logout</a>
+      </div>
+    </div>
 
-  <div id="adminContent" style="display:none">
+    <!-- Pending Withdrawals -->
     <div class="section-title">Pending Withdrawal Requests</div>
     <div class="card">
       <table>
         <thead>
-          <tr><th>Date</th><th>User</th><th>Amount</th><th>Net to Pay</th><th>Method</th><th>Details</th><th>Referral Commission</th><th>Action</th></tr>
+          <tr><th>Date</th><th>User</th><th>Amount</th><th>Method</th><th>Details</th><th>Referral Commission</th><th>Action</th></tr>
         </thead>
         <tbody id="pendingBody"></tbody>
       </table>
       <div class="empty" id="pendingEmpty" style="display:none">Koi pending request nahi hai.</div>
     </div>
 
+    <!-- Paid History -->
     <div class="section-title">Paid History</div>
     <div class="card">
       <table>
@@ -43,6 +54,59 @@
       </table>
       <div class="empty" id="paidEmpty" style="display:none">Abhi tak koi paid record nahi.</div>
     </div>
+
+    <!-- Plan Upgrade Requests -->
+    <div class="section-title">Plan Upgrade Karein (Manual)</div>
+    <div class="card">
+      <div class="field" style="max-width:400px; display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;">
+        <div style="flex:1;">
+          <label>User Email</label>
+          <input type="email" id="planEmail" placeholder="user@example.com">
+        </div>
+        <div>
+          <label>Plan</label>
+          <select id="planSelect">
+            <option value="free">Free</option>
+            <option value="silver">Silver</option>
+            <option value="gold">Gold</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" id="planUpgradeBtn">Upgrade Karein</button>
+      </div>
+      <p class="hint" id="planMsg" style="margin-top:10px;"></p>
+    </div>
+
+    <!-- Fake Withdrawals Management -->
+    <div class="section-title">Fake Withdrawals (Trust Display)</div>
+    <div class="card">
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px; align-items:flex-end;">
+        <div class="field" style="margin:0; flex:1; min-width:140px;">
+          <label>Name</label>
+          <input type="text" id="fwName" placeholder="Ali R.">
+        </div>
+        <div class="field" style="margin:0; width:110px;">
+          <label>Amount (₨)</label>
+          <input type="number" id="fwAmount" placeholder="500">
+        </div>
+        <div class="field" style="margin:0; width:130px;">
+          <label>Method</label>
+          <select id="fwMethod">
+            <option>JazzCash</option>
+            <option>EasyPaisa</option>
+            <option>Bank Transfer</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" id="fwAddBtn">Add</button>
+      </div>
+      <table>
+        <thead>
+          <tr><th>Name</th><th>Amount</th><th>Method</th><th>Action</th></tr>
+        </thead>
+        <tbody id="fwBody"></tbody>
+      </table>
+      <div class="empty" id="fwEmpty" style="display:none">Koi fake withdrawal nahi.</div>
+    </div>
+
   </div>
 </div>
 
