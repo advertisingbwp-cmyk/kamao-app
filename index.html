@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ur" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kamao — Ads Dekho, Kamao</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="wrap">
+  <div class="nav">
+    <div class="brand"><span class="coin">K</span> Kamao</div>
+    <div class="nav-links">
+      <span id="navMsg"></span>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div>
+      <span class="eyebrow">Watch &middot; Earn &middot; Withdraw</span>
+      <h1>Apna waqt do, thora sa munafa lo.</h1>
+      <p class="lead">Roz kuch ads dekho, apna balance barhao, aur jab chahen apne bank ya JazzCash mein withdraw karo. Dost ko invite karo aur unki har withdrawal par bonus paao.</p>
+      <div class="stat-row">
+        <div><div class="num" id="statReward">$0.02</div><div class="label">per ad</div></div>
+        <div><div class="num" id="statLimit">15</div><div class="label">ads / din</div></div>
+        <div><div class="num" id="statMin">$5</div><div class="label">min withdraw</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="tabs">
+        <div class="tab active" id="tabLogin">Login</div>
+        <div class="tab" id="tabSignup">Signup</div>
+      </div>
+
+      <form id="loginForm">
+        <div class="field">
+          <label>Email</label>
+          <input type="email" id="loginEmail" required placeholder="aap@example.com">
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" id="loginPassword" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Login</button>
+        <p class="error-msg" id="loginError"></p>
+      </form>
+
+      <form id="signupForm" style="display:none">
+        <div class="field">
+          <label>Email</label>
+          <input type="email" id="signupEmail" required placeholder="aap@example.com">
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" id="signupPassword" required minlength="6" placeholder="Kam se kam 6 characters">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Account Banayein</button>
+        <p class="error-msg" id="signupError"></p>
+        <p class="hint" id="refHint" style="display:none"></p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<footer>Kamao &copy; 2026 — Ads real users ko dikhayi jati hain, click/view genuine hona chahiye.</footer>
+
+<script type="module" src="js/auth.js"></script>
+</body>
+</html>

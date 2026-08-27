@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ur" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Kamao</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand"><span class="coin">K</span> Kamao</div>
+    <div class="user-chip">
+      <span id="userEmail">...</span> &nbsp;·&nbsp;
+      <a href="#" id="logoutBtn">Logout</a>
+    </div>
+  </div>
+
+  <div class="balance-block">
+    <div class="label">Total Balance (withdrawable)</div>
+    <div class="amount mono" id="balanceAmount">$0.00</div>
+    <div class="balance-sub">
+      <div>Earning se: <b class="mono" id="earnPart">$0.00</b></div>
+      <div>Referral bonus se: <b class="mono" id="refPart">$0.00</b></div>
+    </div>
+  </div>
+
+  <div class="dash-grid">
+    <!-- LEFT: Watch Ad -->
+    <div>
+      <div class="card ad-card">
+        <div class="ring-wrap">
+          <svg viewBox="0 0 150 150">
+            <circle class="ring-bg" cx="75" cy="75" r="66"></circle>
+            <circle class="ring-fg" id="ringFg" cx="75" cy="75" r="66"></circle>
+          </svg>
+          <div class="ring-center">
+            <div class="coin-icon">🪙</div>
+            <div class="secs" id="ringSecs">Ready</div>
+          </div>
+        </div>
+
+        <div class="ad-slot" id="adSlot">
+          Yahan aapka Adsterra ad code load hoga
+          <!-- Paste your Adsterra ad unit script/iframe here -->
+        </div>
+
+        <button class="btn btn-primary btn-block" id="watchBtn">Ad Dekhna Shuru Karein</button>
+
+        <div class="progress-bar"><div class="fill" id="dailyFill" style="width:0%"></div></div>
+        <div class="progress-label" id="dailyLabel">0 / 15 ads aaj</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Referral + Withdraw -->
+    <div>
+      <div class="card" style="margin-bottom:20px;">
+        <h3 style="font-size:16px; margin-bottom:6px;">Referral Link</h3>
+        <p class="hint">Dost is link se signup kare to, jab wo withdraw karega, aapko bonus milega.</p>
+        <div class="ref-box">
+          <input type="text" id="refLink" readonly>
+          <button class="btn btn-ghost" id="copyRefBtn">Copy</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:16px; margin-bottom:14px;">Withdraw Request</h3>
+        <form id="withdrawForm">
+          <div class="field">
+            <label>Amount ($)</label>
+            <input type="number" id="wdAmount" step="0.01" min="1" required>
+          </div>
+          <div class="field">
+            <label>Method</label>
+            <select id="wdMethod">
+              <option>Bank Transfer</option>
+              <option>JazzCash</option>
+              <option>EasyPaisa</option>
+              <option>USDT (Tether)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Account Details</label>
+            <input type="text" id="wdDetails" required placeholder="Account number / JazzCash number / wallet address">
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Withdraw Request Bhejein</button>
+          <p class="error-msg" id="wdError"></p>
+          <p class="hint" id="wdFeeHint"></p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Withdrawal History</div>
+  <div class="card">
+    <table>
+      <thead>
+        <tr><th>Date</th><th>Amount</th><th>Method</th><th>Status</th></tr>
+      </thead>
+      <tbody id="historyBody"></tbody>
+    </table>
+    <div class="empty" id="historyEmpty" style="display:none">Abhi tak koi withdrawal request nahi hai.</div>
+  </div>
+</div>
+
+<footer>Kamao &copy; 2026</footer>
+
+<script type="module" src="js/dashboard.js"></script>
+</body>
+</html>
