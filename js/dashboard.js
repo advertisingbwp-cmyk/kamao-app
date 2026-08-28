@@ -126,7 +126,7 @@ function startAdTimer() {
   watchBtn.textContent = "Ad chal rahi hai...";
 
   // Open Adsterra Smartlink in new tab
-  window.open("https://bibleearthquake.com/h9fgjabvra?key=afd27586e5e065ccedc5e1e9314adfc7", "_blank");
+  window.open("https://bibleearthquake.com/ccf1q1jw?key=52f7ecf948a0f517f28ed331316d0239", "_blank");
 
   let remaining = SETTINGS.AD_WATCH_SECONDS;
   ringSecs.textContent = remaining + "s";
