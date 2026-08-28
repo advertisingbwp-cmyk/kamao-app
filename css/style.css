@@ -202,3 +202,13 @@ footer{ text-align:center; padding:40px 0 20px; color:var(--text-dim); font-size
 /* ---------- ADMIN PASS GATE ---------- */
 .pass-gate{ min-height:100vh; display:flex; align-items:center; justify-content:center; background:var(--bg); padding:24px; }
 
+/* ---------- STICKY BOTTOM BANNER ---------- */
+.sticky-banner{
+  position:fixed; bottom:0; left:50%; transform:translateX(-50%);
+  z-index:9999; background:var(--bg-card);
+  border-top:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center;
+  padding:4px 0;
+}
+
+
